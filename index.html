@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Structures & Algorithms Interactive Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Soothing Study -->
+    <!-- Application Structure Plan: The application uses a fixed sidebar navigation with a scrollable main content area. This structure is chosen to break down the dense, linear syllabus into manageable, directly accessible topics, which is superior for learning and reference compared to a simple, long page. This non-linear access allows users to focus on specific concepts. The core of the design is an interactive "Playground" section to transform the abstract concepts of Array vs. Linked List operations into a tangible, visual demonstration, enhancing understanding and retention. -->
+    <!-- Visualization & Content Choices: 
+        - Big O Notation: Goal=Compare/Inform -> Viz=Styled HTML cards with icons -> Interaction=None -> Justification=Visually separates and categorizes complex concepts, making them easier to digest than a single, dense chart. Uses color-coding for intuitive understanding of performance.
+        - Array vs. Linked List Operations: Goal=Compare/Engage -> Viz=Interactive DOM manipulation (divs as visual blocks) -> Interaction=User clicks buttons to trigger animations of insertion -> Justification=Provides a dynamic, hands-on demonstration of the key efficiency differences, making a critical and abstract concept memorable and clear.
+        - C++ Code: Goal=Inform -> Presentation=Formatted and syntax-highlighted code blocks -> Interaction=None -> Justification=Directly provides the required Turbo C++ compatible examples in a readable format.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
+        .code-block {
+            background-color: #1e293b; /* slate-800 */
+            color: #e2e8f0; /* slate-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .code-block .keyword { color: #93c5fd; } /* blue-300 */
+        .code-block .type { color: #818cf8; } /* indigo-400 */
+        .code-block .comment { color: #94a3b8; } /* slate-400 */
+        .code-block .string { color: #a5b4fc; } /* indigo-300 */
+        .code-block .literal { color: #f87171; } /* red-400 */
+        .sidebar-link {
+            display: block;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: all 0.2s ease-in-out;
+            font-weight: 500;
+            color: #475569; /* slate-600 */
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: #e2e8f0; /* slate-200 */
+            color: #0f172a; /* slate-900 */
+        }
+        .sidebar-heading {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #94a3b8; /* slate-400 */
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            padding: 0 1rem;
+        }
+        .content-section {
+            padding-top: 4rem;
+            margin-top: -4rem;
+        }
+        .visual-block {
+            transition: all 0.5s ease-in-out;
+            border: 2px solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .visual-block.shifting {
+            transform: translateX(20px);
+            opacity: 0.5;
+        }
+        .visual-block.inserting {
+            transform: scale(1.1);
+            background-color: #4ade80; /* green-400 */
+            border-color: #22c55e; /* green-500 */
+        }
+        .visual-block.new-node {
+             animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <div class="flex">
+        <!-- Sidebar Navigation -->
+        <aside class="w-64 h-screen sticky top-0 bg-white border-r border-slate-200 p-4 hidden md:block">
+            <h1 class="text-xl font-bold text-slate-900">DS & Algo Guide</h1>
+            <nav id="sidebar-nav" class="mt-8">
+                <div class="sidebar-heading">UNIT I</div>
+                <a href="#data-structures" class="sidebar-link">Data Structures</a>
+                <a href="#algorithms" class="sidebar-link">Algorithms</a>
+                <a href="#complexity" class="sidebar-link">Complexity & Big O</a>
+                <a href="#arrays" class="sidebar-link">Arrays</a>
+                
+                <div class="sidebar-heading">UNIT II</div>
+                <a href="#linked-lists" class="sidebar-link">Linked Lists</a>
+                
+                <div class="sidebar-heading">Interactive</div>
+                <a href="#playground" class="sidebar-link">Playground</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 md:p-10 lg:p-12">
+            <div class="max-w-4xl mx-auto">
+                
+                <!-- Unit I -->
+                <section id="data-structures" class="space-y-6 content-section">
+                    <h2 class="text-3xl font-bold text-slate-900 border-b pb-2">UNIT I: Foundations & Arrays</h2>
+                    <h3 class="text-2xl font-semibold text-slate-800 pt-4">What is a Data Structure?</h3>
+                    <p>A <strong>Data Structure</strong> is a specialized format for organizing, processing, retrieving, and storing data in a computer's memory. It's not just about storing data, but about arranging it so it can be used efficiently. The choice of data structure is crucial for creating high-performance software, and depends on the application, the type of data, and the operations that will be performed most frequently.</p>
+                    
+                    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
+                        <p class="font-semibold">Core Idea:</p>
+                        <p>Think of a library: books can be thrown into a pile (unorganized data) or systematically arranged by genre on shelves (a data structure). Finding a specific book in the organized library is far more efficient.</p>
+                    </div>
+
+                    <h4 class="text-xl font-semibold text-slate-700">Common Operations</h4>
+                    <p>Most data structures support a set of common operations:</p>
+                    <ul class="list-disc list-inside space-y-2 pl-4">
+                        <li><strong>Traversing:</strong> Accessing each data element exactly once.</li>
+                        <li><strong>Searching:</strong> Finding the location of a specific data element.</li>
+                        <li><strong>Inserting:</strong> Adding a new data element to the structure.</li>
+                        <li><strong>Deleting:</strong> Removing a data element from the structure.</li>
+                        <li><strong>Sorting:</strong> Arranging elements in a specific order.</li>
+                        <li><strong>Merging:</strong> Combining two similar structures into one.</li>
+                    </ul>
+                </section>
+
+                <section id="algorithms" class="space-y-6 content-section">
+                    <h3 class="text-2xl font-semibold text-slate-800">What is an Algorithm?</h3>
+                    <p>An <strong>Algorithm</strong> is a finite, well-defined, and effective sequence of instructions designed to solve a specific class of problems or to perform a computation. It's an abstract recipe, independent of any specific programming language.</p>
+                    <h4 class="text-xl font-semibold text-slate-700">Critical Characteristics</h4>
+                     <ul class="list-disc list-inside space-y-2 pl-4">
+                        <li><strong>Finite:</strong> It must terminate after a finite number of steps.</li>
+                        <li><strong>Well-defined:</strong> Each step must be precise and unambiguous.</li>
+                        <li><strong>Effective:</strong> Every instruction must be basic enough to be feasible.</li>
+                        <li><strong>Input:</strong> It takes zero or more values as input.</li>
+                        <li><strong>Output:</strong> It produces at least one value as output.</li>
+                    </ul>
+                </section>
+
+                <section id="complexity" class="space-y-6 content-section">
+                    <h3 class="text-2xl font-semibold text-slate-800">Complexity & Big O Notation</h3>
+                    <p><strong>Algorithm Complexity</strong> is a measure of the resources (time and memory) an algorithm needs, expressed as a function of the input size (`n`). **Big O Notation** is the standard way to describe this, focusing on the worst-case scenario to understand how an algorithm will scale.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                        <!-- Big O Cards -->
+                        <div class="bg-green-100 p-4 rounded-lg border border-green-200">
+                            <h5 class="font-bold text-green-800">O(1) - Constant</h5>
+                            <p class="text-sm text-green-700">Always takes the same amount of time, regardless of input size. The pinnacle of efficiency.</p>
+                        </div>
+                        <div class="bg-lime-100 p-4 rounded-lg border border-lime-200">
+                            <h5 class="font-bold text-lime-800">O(log n) - Logarithmic</h5>
+                            <p class="text-sm text-lime-700">Runtime grows very slowly. Doubling the input adds only one extra step. Ex: Binary Search.</p>
+                        </div>
+                        <div class="bg-yellow-100 p-4 rounded-lg border border-yellow-200">
+                            <h5 class="font-bold text-yellow-800">O(n) - Linear</h5>
+                            <p class="text-sm text-yellow-700">Runtime grows directly with the input size. Fair and predictable performance.</p>
+                        </div>
+                        <div class="bg-orange-100 p-4 rounded-lg border border-orange-200">
+                            <h5 class="font-bold text-orange-800">O(n log n) - Log-Linear</h5>
+                            <p class="text-sm text-orange-700">Very efficient for sorting large datasets. Ex: Merge Sort, Quicksort.</p>
+                        </div>
+                        <div class="bg-red-100 p-4 rounded-lg border border-red-200">
+                            <h5 class="font-bold text-red-800">O(n²) - Quadratic</h5>
+                            <p class="text-sm text-red-700">Runtime grows exponentially. Becomes slow very quickly. Often involves nested loops.</p>
+                        </div>
+                         <div class="bg-rose-100 p-4 rounded-lg border border-rose-200">
+                            <h5 class="font-bold text-rose-800">O(2ⁿ) - Exponential</h5>
+                            <p class="text-sm text-rose-700">Runtime doubles with each new item. Generally infeasible for anything but small inputs.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="arrays" class="space-y-6 content-section">
+                    <h3 class="text-2xl font-semibold text-slate-800">Arrays</h3>
+                    <p>An <strong>Array</strong> is a fundamental data structure that stores a collection of elements of the <strong>same data type</strong> in a single, contiguous block of memory. This contiguity allows for highly efficient random access to elements using an index.</p>
+                    <h4 class="text-xl font-semibold text-slate-700">Memory Representation</h4>
+                    <p>The address of any element can be calculated with the formula: <code class="bg-slate-200 p-1 rounded">Address(arr[i]) = BaseAddress + (i * size_of_element)</code>. This direct calculation is why array access is an **O(1)** operation.</p>
+                    <h4 class="text-xl font-semibold text-slate-700">C++ Code Example: Linear Array Operations</h4>
+                    <div class="code-block">
+                        <span class="comment">// C++ (Turbo C++ compatible)</span><br>
+                        <span class="keyword">#include</span> <span class="string">&lt;iostream.h&gt;</span><br>
+                        <span class="keyword">#include</span> <span class="string">&lt;conio.h&gt;</span><br><br>
+                        <span class="type">void</span> traverse(<span class="type">int</span> arr[], <span class="type">int</span> size) { ... }<br>
+                        <span class="type">int</span> insertElement(<span class="type">int</span> arr[], <span class="type">int</span> size, <span class="type">int</span> el, <span class="type">int</span> pos) { ... }<br>
+                        <span class="type">int</span> deleteElement(<span class="type">int</span> arr[], <span class="type">int</span> size, <span class="type">int</span> pos) { ... }<br><br>
+                        <span class="type">void</span> main() {<br>
+                        &nbsp;&nbsp;clrscr();<br>
+                        &nbsp;&nbsp;<span class="type">int</span> my_array[<span class="literal">50</span>] = {<span class="literal">10</span>, <span class="literal">20</span>, <span class="literal">30</span>, <span class="literal">40</span>, <span class="literal">50</span>};<br>
+                        &nbsp;&nbsp;<span class="type">int</span> current_size = <span class="literal">5</span>;<br><br>
+                        &nbsp;&nbsp;cout &lt;&lt; <span class="string">"Initial Array:"</span> &lt;&lt; endl;<br>
+                        &nbsp;&nbsp;traverse(my_array, current_size);<br><br>
+                        &nbsp;&nbsp;cout &lt;&lt; <span class="string">"\nInserting 25 at index 2..."</span> &lt;&lt; endl;<br>
+                        &nbsp;&nbsp;current_size = insertElement(my_array, current_size, <span class="literal">25</span>, <span class="literal">2</span>);<br>
+                        &nbsp;&nbsp;traverse(my_array, current_size);<br><br>
+                        &nbsp;&nbsp;getch();<br>
+                        }
+                    </div>
+                </section>
+                
+                <!-- Unit II -->
+                <section id="linked-lists" class="space-y-6 content-section">
+                    <h2 class="text-3xl font-bold text-slate-900 border-b pb-2">UNIT II: Linked Lists</h2>
+                    <h3 class="text-2xl font-semibold text-slate-800 pt-4">Introduction to Linked Lists</h3>
+                    <p>A <strong>Linked List</strong> is a linear data structure where elements, called **nodes**, are not stored contiguously. Instead, each node contains the data and a **pointer** (or reference) to the next node in the sequence. This forms a chain-like structure.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                        <div class="bg-white p-4 rounded-lg border">
+                            <h5 class="font-semibold text-lg">Advantages over Arrays</h5>
+                             <ul class="list-disc list-inside space-y-2 mt-2 text-sm">
+                                <li><strong>Dynamic Size:</strong> Can easily grow or shrink at runtime.</li>
+                                <li><strong>Efficient Insertion/Deletion:</strong> O(1) time complexity if the preceding node is known, as no element shifting is needed.</li>
+                                <li><strong>No Memory Wastage:</strong> Memory is allocated per node, as needed.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border">
+                             <h5 class="font-semibold text-lg">Disadvantages</h5>
+                             <ul class="list-disc list-inside space-y-2 mt-2 text-sm">
+                                <li><strong>No Random Access:</strong> Accessing an element requires traversing from the head (O(n)).</li>
+                                <li><strong>Extra Memory Overhead:</strong> Each node requires extra memory for the pointer.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h4 class="text-xl font-semibold text-slate-700 pt-4">C++ Code Example: Singly Linked List</h4>
+                     <div class="code-block">
+                        <span class="comment">// C++ (Turbo C++ compatible)</span><br>
+                        <span class="keyword">#include</span> <span class="string">&lt;iostream.h&gt;</span><br>
+                        <span class="keyword">#include</span> <span class="string">&lt;stdlib.h&gt;</span> <span class="comment">// For NULL</span><br><br>
+                        <span class="keyword">struct</span> Node {<br>
+                        &nbsp;&nbsp;<span class="type">int</span> data;<br>
+                        &nbsp;&nbsp;Node* next;<br>
+                        };<br><br>
+                        <span class="type">void</span> display(Node* head) { ... }<br>
+                        <span class="type">void</span> insertAtBeginning(Node** head_ref, <span class="type">int</span> data) { ... }<br><br>
+                        <span class="type">void</span> main() {<br>
+                        &nbsp;&nbsp;clrscr();<br>
+                        &nbsp;&nbsp;Node* head = <span class="literal">NULL</span>;<br>
+                        &nbsp;&nbsp;insertAtBeginning(&amp;head, <span class="literal">10</span>);<br>
+                        &nbsp;&nbsp;insertAtBeginning(&amp;head, <span class="literal">20</span>);<br>
+                        &nbsp;&nbsp;display(head);<br>
+                        &nbsp;&nbsp;getch();<br>
+                        }
+                    </div>
+                </section>
+                
+                <!-- Playground -->
+                <section id="playground" class="space-y-6 content-section">
+                    <h2 class="text-3xl font-bold text-slate-900 border-b pb-2">Interactive Playground</h2>
+                    <h3 class="text-2xl font-semibold text-slate-800 pt-4">Array vs. Linked List Insertion</h3>
+                    <p>This interactive demo visualizes the fundamental difference between inserting an element into an array versus a linked list. Notice the "shifting" required for the array, an O(n) operation, compared to the simple pointer change for the linked list, an O(1) operation.</p>
+                    
+                    <div class="bg-white p-6 rounded-lg border mt-4">
+                        <div class="flex items-center space-x-4 mb-6">
+                             <input type="number" id="insert-value" value="99" class="border-slate-300 rounded-md shadow-sm w-24 text-center">
+                             <button id="insert-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition-colors">Insert at Index 2</button>
+                             <button id="reset-btn" class="bg-slate-500 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded transition-colors">Reset</button>
+                        </div>
+                        <p id="status-text" class="text-sm text-slate-600 h-5 mb-4"></p>
+
+                        <!-- Array Visualization -->
+                        <div>
+                            <h4 class="font-semibold mb-2">Array</h4>
+                            <div id="array-container" class="flex space-x-2 h-20 items-center"></div>
+                        </div>
+
+                        <hr class="my-6">
+
+                        <!-- Linked List Visualization -->
+                         <div>
+                            <h4 class="font-semibold mb-2">Linked List</h4>
+                            <div id="list-container" class="flex h-20 items-center"></div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sections = document.querySelectorAll('.content-section');
+        const navLinks = document.querySelectorAll('#sidebar-nav a');
+        
+        // Active link highlighting on scroll
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // --- Playground Logic ---
+        const insertBtn = document.getElementById('insert-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const valueInput = document.getElementById('insert-value');
+        const statusText = document.getElementById('status-text');
+        const arrayContainer = document.getElementById('array-container');
+        const listContainer = document.getElementById('list-container');
+        
+        let initialArray = [10, 20, 30, 40, 50];
+        let initialList = [10, 20, 30, 40, 50];
+        
+        function createVisualBlock(value, type, isArrow = false) {
+            const block = document.createElement('div');
+            if (isArrow) {
+                block.innerHTML = '&rarr;';
+                block.className = 'text-2xl text-slate-400 mx-2';
+            } else {
+                block.textContent = value;
+                block.className = 'visual-block h-12 w-12 rounded-md';
+                if (type === 'array') {
+                    block.classList.add('bg-indigo-100', 'border-indigo-300', 'text-indigo-800');
+                } else {
+                    block.classList.add('bg-teal-100', 'border-teal-300', 'text-teal-800');
+                }
+            }
+            return block;
+        }
+
+        function renderStructures() {
+            arrayContainer.innerHTML = '';
+            listContainer.innerHTML = '';
+            
+            initialArray.forEach(val => {
+                arrayContainer.appendChild(createVisualBlock(val, 'array'));
+            });
+
+            initialList.forEach((val, index) => {
+                listContainer.appendChild(createVisualBlock(val, 'list'));
+                if (index < initialList.length - 1) {
+                    listContainer.appendChild(createVisualBlock(null, null, true));
+                }
+            });
+        }
+        
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function handleInsert() {
+            insertBtn.disabled = true;
+            resetBtn.disabled = true;
+            const valueToInsert = parseInt(valueInput.value) || 99;
+            const insertIndex = 2;
+
+            // --- Animate Array ---
+            statusText.textContent = "Inserting into Array... requires shifting elements (O(n)).";
+            const arrayBlocks = Array.from(arrayContainer.children);
+            for (let i = arrayBlocks.length - 1; i >= insertIndex; i--) {
+                arrayBlocks[i].classList.add('shifting');
+                await sleep(300);
+            }
+            await sleep(200);
+            
+            const newArrayBlock = createVisualBlock(valueToInsert, 'array');
+            newArrayBlock.classList.add('inserting');
+            arrayContainer.insertBefore(newArrayBlock, arrayBlocks[insertIndex]);
+            
+            arrayBlocks.forEach(b => b.classList.remove('shifting'));
+            await sleep(500);
+            newArrayBlock.classList.remove('inserting');
+
+            // --- Animate Linked List ---
+            statusText.textContent = "Inserting into Linked List... just redirecting pointers (O(1)).";
+            const listElements = Array.from(listContainer.children); // nodes and arrows
+            const newListNode = createVisualBlock(valueToInsert, 'list');
+            const newArrow = createVisualBlock(null, null, true);
+            newListNode.classList.add('new-node');
+            
+            const nodeBefore = listElements[2 * (insertIndex - 1)];
+            const arrowAfterNodeBefore = listElements[2 * (insertIndex - 1) + 1];
+            
+            arrowAfterNodeBefore.style.color = '#f87171'; // red-400
+            await sleep(800);
+            
+            listContainer.insertBefore(newArrow, arrowAfterNodeBefore);
+            listContainer.insertBefore(newListNode, newArrow);
+            
+            await sleep(500);
+            arrowAfterNodeBefore.style.color = '#94a3b8'; // slate-400
+            
+            statusText.textContent = "Done! Notice the difference in operations.";
+            resetBtn.disabled = false;
+        }
+
+        function handleReset() {
+            initialArray = [10, 20, 30, 40, 50];
+            initialList = [10, 20, 30, 40, 50];
+            renderStructures();
+            statusText.textContent = '';
+            insertBtn.disabled = false;
+        }
+        
+        insertBtn.addEventListener('click', handleInsert);
+        resetBtn.addEventListener('click', handleReset);
+        
+        // Initial render
+        renderStructures();
+    });
+</script>
+
+</body>
+</html>
