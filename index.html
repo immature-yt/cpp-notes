@@ -231,6 +231,26 @@
                         </div>
                     </div>
                     
+                    <h4 class="text-xl font-semibold text-slate-700 pt-4">Theory of Linked List Operations</h4>
+                    <div class="space-y-4">
+                        <div>
+                            <h5 class="font-semibold">Traversal (O(n))</h5>
+                            <p>To traverse a linked list, you start with a temporary pointer set to the `head`. You then loop as long as this pointer is not `NULL`. In each iteration, you process the current node's data and then move the pointer to the next node by following its `next` reference (`current = current->next`). This process continues until you reach the end of the list.</p>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold">Insertion</h5>
+                            <p>
+                                <strong>At the Beginning (O(1)):</strong> This is the most efficient insertion. You create a new node, set its `next` pointer to the current `head` of the list, and then update the `head` to point to your new node.
+                                <br>
+                                <strong>At the End (O(n)):</strong> You must first traverse the entire list to find the last node (whose `next` is `NULL`). Once found, you update its `next` pointer to point to the new node.
+                            </p>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold">Deletion (O(n))</h5>
+                            <p>To delete a node with a specific key, you must traverse the list to find it, while also keeping a pointer to the *previous* node. Once the target node is found, you bypass it by setting the `previous` node's `next` pointer to the target node's `next` pointer. Finally, you deallocate the memory of the target node to prevent memory leaks. If the node to be deleted is the head, you simply update the `head` pointer to the second node.</p>
+                        </div>
+                    </div>
+
                     <h4 class="text-xl font-semibold text-slate-700 pt-4">C++ Code Example: Singly Linked List</h4>
                      <div class="code-block">
                         <span class="comment">// C++ (Turbo C++ compatible)</span><br>
@@ -282,6 +302,10 @@
                         </div>
                     </div>
                 </section>
+
+                <footer class="text-center text-slate-500 mt-12 py-4 border-t">
+                    <p>notes and website made by Harjot Singh</p>
+                </footer>
 
             </div>
         </main>
@@ -422,3 +446,4 @@
 
 </body>
 </html>
+
