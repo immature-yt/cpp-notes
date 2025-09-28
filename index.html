@@ -12,7 +12,7 @@
     <!-- Application Structure Plan: The application uses a fixed sidebar navigation with a scrollable main content area. This structure is chosen to break down the dense, linear syllabus into manageable, directly accessible topics, which is superior for learning and reference compared to a simple, long page. This non-linear access allows users to focus on specific concepts. The core of the design is an interactive "Playground" section to transform the abstract concepts of Array vs. Linked List operations into a tangible, visual demonstration, enhancing understanding and retention. -->
     <!-- Visualization & Content Choices: 
         - Big O Notation: Goal=Compare/Inform -> Viz=Styled HTML cards with icons -> Interaction=None -> Justification=Visually separates and categorizes complex concepts, making them easier to digest than a single, dense chart. Uses color-coding for intuitive understanding of performance.
-        - Array vs. Linked List Operations: Goal=Compare/Engage -> Viz=Interactive DOM manipulation (divs as visual blocks) -> Interaction=User clicks buttons to trigger animations of insertion -> Justification=Provides a dynamic, hands-on demonstration of the key efficiency differences, making a critical and abstract concept memorable and clear.
+        - Array vs. Linked List Operations: Goal=Compare/Engage -> Viz=Interactive DOM manipulation (divs as visual blocks) -> Interaction=User clicks buttons to trigger animations of insertion, searching, and sorting -> Justification=Provides a dynamic, hands-on demonstration of the key efficiency differences, making a critical and abstract concept memorable and clear.
         - C++ Code: Goal=Inform -> Presentation=Formatted and syntax-highlighted code blocks -> Interaction=None -> Justification=Directly provides the required Turbo C++ compatible examples in a readable format.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
@@ -68,6 +68,7 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
+            flex-shrink: 0;
         }
         .visual-block.shifting {
             transform: translateX(20px);
@@ -77,6 +78,21 @@
             transform: scale(1.1);
             background-color: #4ade80; /* green-400 */
             border-color: #22c55e; /* green-500 */
+        }
+        .visual-block.searching {
+            background-color: #facc15; /* yellow-400 */
+            border-color: #eab308; /* yellow-500 */
+        }
+        .visual-block.found {
+            background-color: #4ade80; /* green-400 */
+            border-color: #22c55e; /* green-500 */
+        }
+         .visual-block.sorted {
+            background-color: #c4b5fd; /* violet-300 */
+            border-color: #a78bfa; /* violet-400 */
+        }
+        .visual-block.swapping {
+            transition: transform 0.5s ease-in-out;
         }
         .visual-block.new-node {
              animation: fadeIn 0.5s ease-in-out;
@@ -152,31 +168,12 @@
                     <h3 class="text-2xl font-semibold text-slate-800">Complexity & Big O Notation</h3>
                     <p><strong>Algorithm Complexity</strong> is a measure of the resources (time and memory) an algorithm needs, expressed as a function of the input size (`n`). **Big O Notation** is the standard way to describe this, focusing on the worst-case scenario to understand how an algorithm will scale.</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                        <!-- Big O Cards -->
-                        <div class="bg-green-100 p-4 rounded-lg border border-green-200">
-                            <h5 class="font-bold text-green-800">O(1) - Constant</h5>
-                            <p class="text-sm text-green-700">Always takes the same amount of time, regardless of input size. The pinnacle of efficiency.</p>
-                        </div>
-                        <div class="bg-lime-100 p-4 rounded-lg border border-lime-200">
-                            <h5 class="font-bold text-lime-800">O(log n) - Logarithmic</h5>
-                            <p class="text-sm text-lime-700">Runtime grows very slowly. Doubling the input adds only one extra step. Ex: Binary Search.</p>
-                        </div>
-                        <div class="bg-yellow-100 p-4 rounded-lg border border-yellow-200">
-                            <h5 class="font-bold text-yellow-800">O(n) - Linear</h5>
-                            <p class="text-sm text-yellow-700">Runtime grows directly with the input size. Fair and predictable performance.</p>
-                        </div>
-                        <div class="bg-orange-100 p-4 rounded-lg border border-orange-200">
-                            <h5 class="font-bold text-orange-800">O(n log n) - Log-Linear</h5>
-                            <p class="text-sm text-orange-700">Very efficient for sorting large datasets. Ex: Merge Sort, Quicksort.</p>
-                        </div>
-                        <div class="bg-red-100 p-4 rounded-lg border border-red-200">
-                            <h5 class="font-bold text-red-800">O(n²) - Quadratic</h5>
-                            <p class="text-sm text-red-700">Runtime grows exponentially. Becomes slow very quickly. Often involves nested loops.</p>
-                        </div>
-                         <div class="bg-rose-100 p-4 rounded-lg border border-rose-200">
-                            <h5 class="font-bold text-rose-800">O(2ⁿ) - Exponential</h5>
-                            <p class="text-sm text-rose-700">Runtime doubles with each new item. Generally infeasible for anything but small inputs.</p>
-                        </div>
+                        <div class="bg-green-100 p-4 rounded-lg border border-green-200"><h5 class="font-bold text-green-800">O(1) - Constant</h5><p class="text-sm text-green-700">Always takes the same amount of time, regardless of input size. The pinnacle of efficiency.</p></div>
+                        <div class="bg-lime-100 p-4 rounded-lg border border-lime-200"><h5 class="font-bold text-lime-800">O(log n) - Logarithmic</h5><p class="text-sm text-lime-700">Runtime grows very slowly. Doubling the input adds only one extra step. Ex: Binary Search.</p></div>
+                        <div class="bg-yellow-100 p-4 rounded-lg border border-yellow-200"><h5 class="font-bold text-yellow-800">O(n) - Linear</h5><p class="text-sm text-yellow-700">Runtime grows directly with the input size. Fair and predictable performance.</p></div>
+                        <div class="bg-orange-100 p-4 rounded-lg border border-orange-200"><h5 class="font-bold text-orange-800">O(n log n) - Log-Linear</h5><p class="text-sm text-orange-700">Very efficient for sorting large datasets. Ex: Merge Sort, Quicksort.</p></div>
+                        <div class="bg-red-100 p-4 rounded-lg border border-red-200"><h5 class="font-bold text-red-800">O(n²) - Quadratic</h5><p class="text-sm text-red-700">Runtime grows exponentially. Becomes slow very quickly. Often involves nested loops.</p></div>
+                        <div class="bg-rose-100 p-4 rounded-lg border border-rose-200"><h5 class="font-bold text-rose-800">O(2ⁿ) - Exponential</h5><p class="text-sm text-rose-700">Runtime doubles with each new item. Generally infeasible for anything but small inputs.</p></div>
                     </div>
                 </section>
                 
@@ -214,41 +211,15 @@
                     <p>A <strong>Linked List</strong> is a linear data structure where elements, called **nodes**, are not stored contiguously. Instead, each node contains the data and a **pointer** (or reference) to the next node in the sequence. This forms a chain-like structure.</p>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                        <div class="bg-white p-4 rounded-lg border">
-                            <h5 class="font-semibold text-lg">Advantages over Arrays</h5>
-                             <ul class="list-disc list-inside space-y-2 mt-2 text-sm">
-                                <li><strong>Dynamic Size:</strong> Can easily grow or shrink at runtime.</li>
-                                <li><strong>Efficient Insertion/Deletion:</strong> O(1) time complexity if the preceding node is known, as no element shifting is needed.</li>
-                                <li><strong>No Memory Wastage:</strong> Memory is allocated per node, as needed.</li>
-                            </ul>
-                        </div>
-                        <div class="bg-white p-4 rounded-lg border">
-                             <h5 class="font-semibold text-lg">Disadvantages</h5>
-                             <ul class="list-disc list-inside space-y-2 mt-2 text-sm">
-                                <li><strong>No Random Access:</strong> Accessing an element requires traversing from the head (O(n)).</li>
-                                <li><strong>Extra Memory Overhead:</strong> Each node requires extra memory for the pointer.</li>
-                            </ul>
-                        </div>
+                        <div class="bg-white p-4 rounded-lg border"><h5 class="font-semibold text-lg">Advantages over Arrays</h5><ul class="list-disc list-inside space-y-2 mt-2 text-sm"><li><strong>Dynamic Size:</strong> Can easily grow or shrink at runtime.</li><li><strong>Efficient Insertion/Deletion:</strong> O(1) time complexity if the preceding node is known, as no element shifting is needed.</li><li><strong>No Memory Wastage:</strong> Memory is allocated per node, as needed.</li></ul></div>
+                        <div class="bg-white p-4 rounded-lg border"><h5 class="font-semibold text-lg">Disadvantages</h5><ul class="list-disc list-inside space-y-2 mt-2 text-sm"><li><strong>No Random Access:</strong> Accessing an element requires traversing from the head (O(n)).</li><li><strong>Extra Memory Overhead:</strong> Each node requires extra memory for the pointer.</li></ul></div>
                     </div>
                     
                     <h4 class="text-xl font-semibold text-slate-700 pt-4">Theory of Linked List Operations</h4>
                     <div class="space-y-4">
-                        <div>
-                            <h5 class="font-semibold">Traversal (O(n))</h5>
-                            <p>To traverse a linked list, you start with a temporary pointer set to the `head`. You then loop as long as this pointer is not `NULL`. In each iteration, you process the current node's data and then move the pointer to the next node by following its `next` reference (`current = current->next`). This process continues until you reach the end of the list.</p>
-                        </div>
-                        <div>
-                            <h5 class="font-semibold">Insertion</h5>
-                            <p>
-                                <strong>At the Beginning (O(1)):</strong> This is the most efficient insertion. You create a new node, set its `next` pointer to the current `head` of the list, and then update the `head` to point to your new node.
-                                <br>
-                                <strong>At the End (O(n)):</strong> You must first traverse the entire list to find the last node (whose `next` is `NULL`). Once found, you update its `next` pointer to point to the new node.
-                            </p>
-                        </div>
-                        <div>
-                            <h5 class="font-semibold">Deletion (O(n))</h5>
-                            <p>To delete a node with a specific key, you must traverse the list to find it, while also keeping a pointer to the *previous* node. Once the target node is found, you bypass it by setting the `previous` node's `next` pointer to the target node's `next` pointer. Finally, you deallocate the memory of the target node to prevent memory leaks. If the node to be deleted is the head, you simply update the `head` pointer to the second node.</p>
-                        </div>
+                        <div><h5 class="font-semibold">Traversal (O(n))</h5><p>To traverse a linked list, you start with a temporary pointer set to the `head`. You then loop as long as this pointer is not `NULL`. In each iteration, you process the current node's data and then move the pointer to the next node by following its `next` reference (`current = current->next`). This process continues until you reach the end of the list.</p></div>
+                        <div><h5 class="font-semibold">Insertion</h5><p><strong>At the Beginning (O(1)):</strong> This is the most efficient insertion. You create a new node, set its `next` pointer to the current `head` of the list, and then update the `head` to point to your new node.<br><strong>At the End (O(n)):</strong> You must first traverse the entire list to find the last node (whose `next` is `NULL`). Once found, you update its `next` pointer to point to the new node.</p></div>
+                        <div><h5 class="font-semibold">Deletion (O(n))</h5><p>To delete a node with a specific key, you must traverse the list to find it, while also keeping a pointer to the *previous* node. Once the target node is found, you bypass it by setting the `previous` node's `next` pointer to the target node's `next` pointer. Finally, you deallocate the memory of the target node to prevent memory leaks. If the node to be deleted is the head, you simply update the `head` pointer to the second node.</p></div>
                     </div>
 
                     <h4 class="text-xl font-semibold text-slate-700 pt-4">C++ Code Example: Singly Linked List</h4>
@@ -276,29 +247,51 @@
                 <!-- Playground -->
                 <section id="playground" class="space-y-6 content-section">
                     <h2 class="text-3xl font-bold text-slate-900 border-b pb-2">Interactive Playground</h2>
-                    <h3 class="text-2xl font-semibold text-slate-800 pt-4">Array vs. Linked List Insertion</h3>
-                    <p>This interactive demo visualizes the fundamental difference between inserting an element into an array versus a linked list. Notice the "shifting" required for the array, an O(n) operation, compared to the simple pointer change for the linked list, an O(1) operation.</p>
+                    <h3 class="text-2xl font-semibold text-slate-800 pt-4">Visualize Operations</h3>
+                    <p>This interactive demo visualizes common data structure operations. See firsthand how the underlying structure affects performance.</p>
                     
-                    <div class="bg-white p-6 rounded-lg border mt-4">
-                        <div class="flex items-center space-x-4 mb-6">
-                             <input type="number" id="insert-value" value="99" class="border-slate-300 rounded-md shadow-sm w-24 text-center">
-                             <button id="insert-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition-colors">Insert at Index 2</button>
-                             <button id="reset-btn" class="bg-slate-500 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded transition-colors">Reset</button>
-                        </div>
-                        <p id="status-text" class="text-sm text-slate-600 h-5 mb-4"></p>
-
-                        <!-- Array Visualization -->
+                    <div class="bg-white p-6 rounded-lg border mt-4 space-y-8">
+                        <!-- Insertion Section -->
                         <div>
-                            <h4 class="font-semibold mb-2">Array</h4>
-                            <div id="array-container" class="flex space-x-2 h-20 items-center"></div>
+                            <h4 class="text-lg font-semibold">1. Insertion</h4>
+                            <div class="flex items-center space-x-4 mt-2">
+                                 <input type="number" id="insert-value" value="99" class="border-slate-300 rounded-md shadow-sm w-24 p-2 text-center" aria-label="Value to insert">
+                                 <input type="number" id="insert-index" value="2" class="border-slate-300 rounded-md shadow-sm w-24 p-2 text-center" aria-label="Index to insert at">
+                                 <button id="insert-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition-colors">Insert</button>
+                            </div>
                         </div>
 
-                        <hr class="my-6">
+                        <!-- Search Section -->
+                        <div>
+                            <h4 class="text-lg font-semibold">2. Linear Search</h4>
+                             <div class="flex items-center space-x-4 mt-2">
+                                 <input type="number" id="search-value" value="40" class="border-slate-300 rounded-md shadow-sm w-24 p-2 text-center" aria-label="Value to search for">
+                                 <button id="search-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition-colors">Search</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Sort Section -->
+                        <div>
+                            <h4 class="text-lg font-semibold">3. Bubble Sort (Array)</h4>
+                            <div class="flex items-center space-x-4 mt-2">
+                                <button id="sort-btn" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded transition-colors">Sort Array</button>
+                                <button id="reset-btn" class="bg-slate-500 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded transition-colors ml-auto">Reset All</button>
+                            </div>
+                        </div>
 
-                        <!-- Linked List Visualization -->
-                         <div>
-                            <h4 class="font-semibold mb-2">Linked List</h4>
-                            <div id="list-container" class="flex h-20 items-center"></div>
+
+                        <p id="status-text" class="text-sm text-slate-600 h-5"></p>
+
+                        <!-- Visualizations -->
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="font-semibold mb-2">Array</h4>
+                                <div id="array-container" class="flex flex-wrap gap-2 h-20 items-center"></div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Linked List</h4>
+                                <div id="list-container" class="flex flex-wrap gap-0 h-20 items-center"></div>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -306,7 +299,6 @@
                 <footer class="text-center text-slate-500 mt-12 py-4 border-t">
                     <p>notes and website made by Harjot Singh</p>
                 </footer>
-
             </div>
         </main>
     </div>
@@ -316,34 +308,29 @@
         const sections = document.querySelectorAll('.content-section');
         const navLinks = document.querySelectorAll('#sidebar-nav a');
         
-        // Active link highlighting on scroll
         window.addEventListener('scroll', () => {
             let current = '';
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
-                if (pageYOffset >= sectionTop - 100) {
-                    current = section.getAttribute('id');
-                }
+                if (pageYOffset >= sectionTop - 100) { current = section.getAttribute('id'); }
             });
-
             navLinks.forEach(link => {
                 link.classList.remove('active');
-                if (link.getAttribute('href').substring(1) === current) {
-                    link.classList.add('active');
-                }
+                if (link.getAttribute('href').substring(1) === current) { link.classList.add('active'); }
             });
         });
 
-        // --- Playground Logic ---
-        const insertBtn = document.getElementById('insert-btn');
-        const resetBtn = document.getElementById('reset-btn');
-        const valueInput = document.getElementById('insert-value');
+        // --- Playground Global Elements & State ---
         const statusText = document.getElementById('status-text');
         const arrayContainer = document.getElementById('array-container');
         const listContainer = document.getElementById('list-container');
+        const allButtons = () => document.querySelectorAll('#playground button');
+
+        let dataArray = [10, 20, 30, 40, 50];
         
-        let initialArray = [10, 20, 30, 40, 50];
-        let initialList = [10, 20, 30, 40, 50];
+        const setButtonsDisabled = (disabled) => {
+            allButtons().forEach(btn => btn.disabled = disabled);
+        };
         
         function createVisualBlock(value, type, isArrow = false) {
             const block = document.createElement('div');
@@ -353,6 +340,7 @@
             } else {
                 block.textContent = value;
                 block.className = 'visual-block h-12 w-12 rounded-md';
+                block.dataset.value = value;
                 if (type === 'array') {
                     block.classList.add('bg-indigo-100', 'border-indigo-300', 'text-indigo-800');
                 } else {
@@ -366,80 +354,199 @@
             arrayContainer.innerHTML = '';
             listContainer.innerHTML = '';
             
-            initialArray.forEach(val => {
+            dataArray.forEach(val => {
                 arrayContainer.appendChild(createVisualBlock(val, 'array'));
             });
 
-            initialList.forEach((val, index) => {
+            dataArray.forEach((val, index) => {
                 listContainer.appendChild(createVisualBlock(val, 'list'));
-                if (index < initialList.length - 1) {
+                if (index < dataArray.length - 1) {
                     listContainer.appendChild(createVisualBlock(null, null, true));
                 }
             });
         }
         
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+        // --- Insertion Logic ---
+        const insertBtn = document.getElementById('insert-btn');
+        const insertValueInput = document.getElementById('insert-value');
+        const insertIndexInput = document.getElementById('insert-index');
 
         async function handleInsert() {
-            insertBtn.disabled = true;
-            resetBtn.disabled = true;
-            const valueToInsert = parseInt(valueInput.value) || 99;
-            const insertIndex = 2;
-
-            // --- Animate Array ---
-            statusText.textContent = "Inserting into Array... requires shifting elements (O(n)).";
-            const arrayBlocks = Array.from(arrayContainer.children);
-            for (let i = arrayBlocks.length - 1; i >= insertIndex; i--) {
-                arrayBlocks[i].classList.add('shifting');
-                await sleep(300);
+            const value = parseInt(insertValueInput.value) || 99;
+            let index = parseInt(insertIndexInput.value);
+            
+            if (isNaN(index) || index < 0 || index > dataArray.length) {
+                statusText.textContent = `Error: Index must be between 0 and ${dataArray.length}.`;
+                return;
             }
-            await sleep(200);
-            
-            const newArrayBlock = createVisualBlock(valueToInsert, 'array');
+
+            setButtonsDisabled(true);
+
+            // Animate Array Insertion
+            statusText.textContent = "Array: Shifting elements to make space... (O(n))";
+            const arrayBlocks = Array.from(arrayContainer.children);
+            for (let i = arrayBlocks.length - 1; i >= index; i--) {
+                arrayBlocks[i].classList.add('shifting');
+                await sleep(200);
+            }
+            await sleep(100);
+            const newArrayBlock = createVisualBlock(value, 'array');
             newArrayBlock.classList.add('inserting');
-            arrayContainer.insertBefore(newArrayBlock, arrayBlocks[insertIndex]);
-            
+            arrayContainer.insertBefore(newArrayBlock, arrayBlocks[index] || null);
             arrayBlocks.forEach(b => b.classList.remove('shifting'));
             await sleep(500);
             newArrayBlock.classList.remove('inserting');
 
-            // --- Animate Linked List ---
-            statusText.textContent = "Inserting into Linked List... just redirecting pointers (O(1)).";
-            const listElements = Array.from(listContainer.children); // nodes and arrows
-            const newListNode = createVisualBlock(valueToInsert, 'list');
+            // Animate Linked List Insertion
+            statusText.textContent = "Linked List: Rerouting pointers... (O(1) after traversal)";
+            const listElements = Array.from(listContainer.children);
+            const newListNode = createVisualBlock(value, 'list');
             const newArrow = createVisualBlock(null, null, true);
             newListNode.classList.add('new-node');
             
-            const nodeBefore = listElements[2 * (insertIndex - 1)];
-            const arrowAfterNodeBefore = listElements[2 * (insertIndex - 1) + 1];
+            if (index === 0) {
+                listContainer.insertBefore(newArrow, listElements[0]);
+                listContainer.insertBefore(newListNode, newArrow);
+            } else {
+                const arrowToBreak = listElements[2 * (index - 1) + 1];
+                arrowToBreak.style.color = '#f87171';
+                await sleep(500);
+                
+                const nodeAfter = listElements[2 * index];
+                listContainer.insertBefore(newArrow, nodeAfter);
+                listContainer.insertBefore(newListNode, newArrow);
+                
+                await sleep(500);
+                arrowToBreak.style.color = '#94a3b8';
+            }
             
-            arrowAfterNodeBefore.style.color = '#f87171'; // red-400
-            await sleep(800);
-            
-            listContainer.insertBefore(newArrow, arrowAfterNodeBefore);
-            listContainer.insertBefore(newListNode, newArrow);
-            
-            await sleep(500);
-            arrowAfterNodeBefore.style.color = '#94a3b8'; // slate-400
-            
-            statusText.textContent = "Done! Notice the difference in operations.";
-            resetBtn.disabled = false;
+            dataArray.splice(index, 0, value);
+            statusText.textContent = "Insertion complete!";
+            setButtonsDisabled(false);
         }
+        insertBtn.addEventListener('click', handleInsert);
+        
+        // --- Search Logic ---
+        const searchBtn = document.getElementById('search-btn');
+        const searchValueInput = document.getElementById('search-value');
 
+        async function handleSearch() {
+            const value = parseInt(searchValueInput.value);
+            if (isNaN(value)) {
+                statusText.textContent = "Please enter a valid number to search.";
+                return;
+            }
+            setButtonsDisabled(true);
+            statusText.textContent = `Searching for ${value}...`;
+
+            let found = false;
+            const allBlocks = [
+                ...Array.from(arrayContainer.children), 
+                ...Array.from(listContainer.querySelectorAll('.visual-block[data-value]'))
+            ];
+
+            for(let i = 0; i < dataArray.length; i++) {
+                const arrayBlock = arrayContainer.children[i];
+                const listBlock = listContainer.querySelectorAll('.visual-block[data-value]')[i];
+                
+                arrayBlock.classList.add('searching');
+                listBlock.classList.add('searching');
+                await sleep(400);
+
+                if (parseInt(arrayBlock.dataset.value) === value) {
+                    arrayBlock.classList.remove('searching');
+                    listBlock.classList.remove('searching');
+                    arrayBlock.classList.add('found');
+                    listBlock.classList.add('found');
+                    statusText.textContent = `Found ${value} at index ${i}!`;
+                    found = true;
+                    break;
+                } else {
+                    arrayBlock.classList.remove('searching');
+                    listBlock.classList.remove('searching');
+                }
+            }
+            if (!found) {
+                statusText.textContent = `${value} not found in the structures.`;
+            }
+            await sleep(1500);
+            allBlocks.forEach(b => b.classList.remove('found', 'searching'));
+            if(!found) statusText.textContent = "";
+            setButtonsDisabled(false);
+        }
+        searchBtn.addEventListener('click', handleSearch);
+
+        // --- Sort Logic ---
+        const sortBtn = document.getElementById('sort-btn');
+        async function handleSort() {
+            setButtonsDisabled(true);
+            statusText.textContent = "Sorting array with Bubble Sort... (O(n²))";
+            let blocks = Array.from(arrayContainer.children);
+            let n = dataArray.length;
+            let localArray = [...dataArray];
+
+            for (let i = 0; i < n - 1; i++) {
+                for (let j = 0; j < n - i - 1; j++) {
+                    const block1 = blocks[j];
+                    const block2 = blocks[j + 1];
+
+                    block1.classList.add('searching');
+                    block2.classList.add('searching');
+                    await sleep(300);
+
+                    if (localArray[j] > localArray[j + 1]) {
+                        // Swap data
+                        [localArray[j], localArray[j+1]] = [localArray[j+1], localArray[j]];
+                        
+                        // Animate swap
+                        const rect1 = block1.getBoundingClientRect();
+                        const rect2 = block2.getBoundingClientRect();
+                        const shift = rect2.left - rect1.left;
+
+                        block1.style.transform = `translateX(${shift}px)`;
+                        block2.style.transform = `translateX(-${shift}px)`;
+                        block1.classList.add('swapping');
+                        block2.classList.add('swapping');
+                        
+                        await sleep(500);
+
+                        // Swap DOM elements
+                        arrayContainer.insertBefore(block2, block1);
+                        
+                        block1.style.transform = '';
+                        block2.style.transform = '';
+                        block1.classList.remove('swapping');
+                        block2.classList.remove('swapping');
+                        
+                        blocks = Array.from(arrayContainer.children); // Re-query DOM
+                    }
+                    block1.classList.remove('searching');
+                    block2.classList.remove('searching');
+                }
+                blocks[n - i - 1].classList.add('sorted');
+            }
+            blocks[0].classList.add('sorted');
+            dataArray = localArray; // update main data array
+            renderStructures(); // re-render list to match sorted array
+            statusText.textContent = "Array sorted!";
+            await sleep(1000);
+            Array.from(arrayContainer.children).forEach(b => b.classList.remove('sorted'));
+            setButtonsDisabled(false);
+        }
+        sortBtn.addEventListener('click', handleSort);
+        
+        // --- Reset Logic ---
+        const resetBtn = document.getElementById('reset-btn');
         function handleReset() {
-            initialArray = [10, 20, 30, 40, 50];
-            initialList = [10, 20, 30, 40, 50];
+            dataArray = [10, 20, 30, 40, 50];
             renderStructures();
             statusText.textContent = '';
-            insertBtn.disabled = false;
+            setButtonsDisabled(false);
         }
-        
-        insertBtn.addEventListener('click', handleInsert);
         resetBtn.addEventListener('click', handleReset);
         
-        // Initial render
         renderStructures();
     });
 </script>
